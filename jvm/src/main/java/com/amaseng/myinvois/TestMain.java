@@ -4,11 +4,15 @@ import com.amaseng.myinvois.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Date;
+
 public class TestMain {
 
     public static void main(String[] args) throws JsonProcessingException {
         Invoice invoice =
             new Invoice(
+                "INV12345",
+                new Date(),
                 new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
                 new Contact("+60-123456789", "general.ams@supplier.com")
             );
