@@ -1,5 +1,9 @@
 package com.amaseng.myinvois.models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class PartyLegalEntity {
     private String registrationName;
 
@@ -9,5 +13,15 @@ public class PartyLegalEntity {
 
     public String getRegistrationName() {
         return registrationName;
+    }
+
+    public Map<Object, Object> toMap() {
+        return new HashMap<Object, Object>() {{
+            put("RegistrationName", new ArrayList<Object>() {{
+                add(new HashMap<Object, Object>() {{
+                    put("_", registrationName);
+                }});
+            }});
+        }};
     }
 }
