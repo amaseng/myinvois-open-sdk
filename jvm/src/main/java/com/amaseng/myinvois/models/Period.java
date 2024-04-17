@@ -1,6 +1,10 @@
 package com.amaseng.myinvois.models;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Period {
     private Date startDate;
@@ -23,5 +27,26 @@ public class Period {
 
     public String getDescription() {
         return description;
+    }
+
+    public Map<Object, Object> toMap() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        return new HashMap<Object, Object>() {{
+            put("StartDate", new ArrayList<Object>() {{
+                add(new HashMap<Object, Object>() {{
+                    put("_", dateFormatter.format(startDate));
+                }});
+            }});
+            put("EndDate", new ArrayList<Object>() {{
+                add(new HashMap<Object, Object>() {{
+                    put("_", dateFormatter.format(endDate));
+                }});
+            }});
+            put("Description", new ArrayList<Object>() {{
+                add(new HashMap<Object, Object>() {{
+                    put("_", description);
+                }});
+            }});
+        }};
     }
 }

@@ -11,14 +11,16 @@ public class Invoice {
     private Date issueDateTime;
     private String invoiceTypeCode;
     private String documentCurrencyCode;
+    private Period invoicePeriod;
     private PartyLegalEntity partyLegalEntity;
     private Contact contact;
 
-    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, PartyLegalEntity partyLegalEntity, Contact contact) {
+    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod, PartyLegalEntity partyLegalEntity, Contact contact) {
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
         this.documentCurrencyCode = documentCurrencyCode;
+        this.invoicePeriod = invoicePeriod;
         this.partyLegalEntity = partyLegalEntity;
         this.contact = contact;
     }
@@ -39,6 +41,10 @@ public class Invoice {
         return documentCurrencyCode;
     }
 
+    public Period getInvoicePeriod() {
+        return invoicePeriod;
+    }
+
     public PartyLegalEntity getPartyLegalEntity() {
         return partyLegalEntity;
     }
@@ -56,6 +62,7 @@ public class Invoice {
             put("IssueTime", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
             put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", "1.0"); }}); }});
             put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
+            put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
             put("PartyLegalEntity", new ArrayList<Object>() {{ add(partyLegalEntity.toMap()); }});
             put("Contact", new ArrayList<Object>() {{ add(contact.toMap()); }});
         }};
