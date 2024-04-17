@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class TestMain {
 
@@ -16,6 +17,7 @@ public class TestMain {
                 "01",
                 "MYR",
                 new Period(new Date(), new Date(), "Monthly"),
+                new DocumentReference("E12345678912", Optional.empty(), Optional.empty()),
                 new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
                 new Contact("+60-123456789", "general.ams@supplier.com")
             );
