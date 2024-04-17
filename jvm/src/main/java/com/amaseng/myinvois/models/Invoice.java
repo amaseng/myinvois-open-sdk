@@ -15,8 +15,9 @@ public class Invoice {
     private DocumentReference billingReference;
     private DocumentReference[] additionalDocumentReference;
     private AccountingParty accountingSupplierParty;
+    private AccountingParty accountingCustomerParty;
 
-    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod, DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty) {
+    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod, DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty, AccountingParty accountingCustomerParty) {
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
@@ -25,6 +26,7 @@ public class Invoice {
         this.billingReference = billingReference;
         this.additionalDocumentReference = additionalDocumentReference;
         this.accountingSupplierParty = accountingSupplierParty;
+        this.accountingCustomerParty = accountingCustomerParty;
     }
 
     public String getId() {
@@ -59,6 +61,10 @@ public class Invoice {
         return accountingSupplierParty;
     }
 
+    public AccountingParty getAccountingCustomerParty() {
+        return accountingCustomerParty;
+    }
+
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss'Z'");
@@ -76,6 +82,7 @@ public class Invoice {
                 }
             }});
             put("AccountingSupplierParty", new ArrayList<Object>() {{ add(accountingSupplierParty.toMap()); }});
+            put("AccountingCustomerParty", new ArrayList<Object>() {{ add(accountingCustomerParty.toMap()); }});
         }};
     }
 }

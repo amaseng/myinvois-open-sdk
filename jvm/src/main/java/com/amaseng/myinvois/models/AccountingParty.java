@@ -48,10 +48,12 @@ public class AccountingParty {
 
     public Map<Object, Object> toMap() {
         return new HashMap<Object, Object>() {{
-            put("AdditionalAccountID", Arrays.stream(additionalAccountID).map(AccountID::toMap).toArray());
+            if (additionalAccountID != null && additionalAccountID.length > 0)
+                put("AdditionalAccountID", Arrays.stream(additionalAccountID).map(AccountID::toMap).toArray());
             put("Party", new ArrayList<Object>() {{
                 add(new HashMap<Object, Object>() {{
-                    put("IndustryClassificationCode", Arrays.stream(industryClassificationCode).map(IndustryClassificationCode::toMap).toArray());
+                    if (industryClassificationCode != null && industryClassificationCode.length > 0)
+                        put("IndustryClassificationCode", Arrays.stream(industryClassificationCode).map(IndustryClassificationCode::toMap).toArray());
                     put("PartyIdentification", Arrays.stream(partyIdentification).map(PartyIdentification::toMap).toArray());
                     put("PostalAddress", new ArrayList<Object>() {{ add(postalAddress.toMap()); }});
                     put("PartyLegalEntity", new ArrayList<Object>() {{ add(partyLegalEntity.toMap()); }});
