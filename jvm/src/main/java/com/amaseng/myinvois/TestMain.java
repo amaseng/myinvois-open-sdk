@@ -18,6 +18,12 @@ public class TestMain {
                 "MYR",
                 new Period(new Date(), new Date(), "Monthly"),
                 new DocumentReference("E12345678912", Optional.empty(), Optional.empty()),
+                new DocumentReference[] {
+                    new DocumentReference("E12345678912", Optional.of("CustomsImportForm"), Optional.empty()),
+                    new DocumentReference("ASEAN-Australia-New Zealand FTA (AANZFTA)", Optional.of("FreeTradeAgreement"), Optional.of("Sample Description")),
+                    new DocumentReference("E12345678912", Optional.of("K2"), Optional.empty()),
+                    new DocumentReference("CIF", Optional.empty(), Optional.empty())
+                },
                 new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
                 new Contact("+60-123456789", "general.ams@supplier.com")
             );

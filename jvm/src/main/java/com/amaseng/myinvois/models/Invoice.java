@@ -13,16 +13,18 @@ public class Invoice {
     private String documentCurrencyCode;
     private Period invoicePeriod;
     private DocumentReference billingReference;
+    private DocumentReference[] additionalDocumentReference;
     private PartyLegalEntity partyLegalEntity;
     private Contact contact;
 
-    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod, DocumentReference billingReference, PartyLegalEntity partyLegalEntity, Contact contact) {
+    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod, DocumentReference billingReference, DocumentReference[] additionalDocumentReference, PartyLegalEntity partyLegalEntity, Contact contact) {
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
         this.documentCurrencyCode = documentCurrencyCode;
         this.invoicePeriod = invoicePeriod;
         this.billingReference = billingReference;
+        this.additionalDocumentReference = additionalDocumentReference;
         this.partyLegalEntity = partyLegalEntity;
         this.contact = contact;
     }
@@ -51,6 +53,10 @@ public class Invoice {
         return billingReference;
     }
 
+    public DocumentReference[] getAdditionalDocumentReference() {
+        return additionalDocumentReference;
+    }
+
     public PartyLegalEntity getPartyLegalEntity() {
         return partyLegalEntity;
     }
@@ -70,6 +76,11 @@ public class Invoice {
             put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
             put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
             put("BillingReference", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
+            put("AdditionalDocumentReference", new ArrayList<Object>() {{
+                for (DocumentReference documentReference : additionalDocumentReference) {
+                    add(documentReference.toMap());
+                }
+            }});
             put("PartyLegalEntity", new ArrayList<Object>() {{ add(partyLegalEntity.toMap()); }});
             put("Contact", new ArrayList<Object>() {{ add(contact.toMap()); }});
         }};
