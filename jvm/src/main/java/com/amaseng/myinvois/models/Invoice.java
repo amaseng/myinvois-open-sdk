@@ -14,10 +14,9 @@ public class Invoice {
     private Period invoicePeriod;
     private DocumentReference billingReference;
     private DocumentReference[] additionalDocumentReference;
-    private PartyLegalEntity partyLegalEntity;
-    private Contact contact;
+    private AccountingParty accountingSupplierParty;
 
-    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod, DocumentReference billingReference, DocumentReference[] additionalDocumentReference, PartyLegalEntity partyLegalEntity, Contact contact) {
+    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod, DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty) {
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
@@ -25,8 +24,7 @@ public class Invoice {
         this.invoicePeriod = invoicePeriod;
         this.billingReference = billingReference;
         this.additionalDocumentReference = additionalDocumentReference;
-        this.partyLegalEntity = partyLegalEntity;
-        this.contact = contact;
+        this.accountingSupplierParty = accountingSupplierParty;
     }
 
     public String getId() {
@@ -57,12 +55,8 @@ public class Invoice {
         return additionalDocumentReference;
     }
 
-    public PartyLegalEntity getPartyLegalEntity() {
-        return partyLegalEntity;
-    }
-
-    public Contact getContact() {
-        return contact;
+    public AccountingParty getAccountingSupplierParty() {
+        return accountingSupplierParty;
     }
 
     public Map<Object, Object> toMap() {
@@ -81,8 +75,7 @@ public class Invoice {
                     add(documentReference.toMap());
                 }
             }});
-            put("PartyLegalEntity", new ArrayList<Object>() {{ add(partyLegalEntity.toMap()); }});
-            put("Contact", new ArrayList<Object>() {{ add(contact.toMap()); }});
+            put("AccountingSupplierParty", new ArrayList<Object>() {{ add(accountingSupplierParty.toMap()); }});
         }};
     }
 }

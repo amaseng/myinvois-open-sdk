@@ -1,19 +1,29 @@
 package com.amaseng.myinvois.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PartyIdentification {
     private String id;
-    private String schemaID;
+    private String schemeID;
 
-    public PartyIdentification(String id, String schemaID) {
+    public PartyIdentification(String id, String schemeID) {
         this.id = id;
-        this.schemaID = schemaID;
+        this.schemeID = schemeID;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getSchemaID() {
-        return schemaID;
+    public String getSchemeID() {
+        return schemeID;
+    }
+
+    public Map<Object, Object> toMap() {
+        return new HashMap<Object, Object>() {{
+            put("_", id);
+            put("schemeID", schemeID);
+        }};
     }
 }
