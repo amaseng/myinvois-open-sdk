@@ -13,6 +13,7 @@ public class TestMain {
             new Invoice(
                 "INV12345",
                 new Date(),
+                "01",
                 new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
                 new Contact("+60-123456789", "general.ams@supplier.com")
             );

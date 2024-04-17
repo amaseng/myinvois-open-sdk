@@ -9,18 +9,28 @@ import java.util.Map;
 public class Invoice {
     private String id;
     private Date issueDateTime;
+    private String invoiceTypeCode;
     private PartyLegalEntity partyLegalEntity;
     private Contact contact;
 
-    public Invoice(String id, Date issueDateTime, PartyLegalEntity partyLegalEntity, Contact contact) {
+    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, PartyLegalEntity partyLegalEntity, Contact contact) {
         this.id = id;
         this.issueDateTime = issueDateTime;
+        this.invoiceTypeCode = invoiceTypeCode;
         this.partyLegalEntity = partyLegalEntity;
         this.contact = contact;
     }
 
     public String getId() {
         return id;
+    }
+
+    public Date getIssueDateTime() {
+        return issueDateTime;
+    }
+
+    public String getInvoiceTypeCode() {
+        return invoiceTypeCode;
     }
 
     public PartyLegalEntity getPartyLegalEntity() {
@@ -38,6 +48,7 @@ public class Invoice {
             put("ID", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", id); }}); }});
             put("IssueDate", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", dateFormatter.format(issueDateTime)); }}); }});
             put("IssueTime", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
+            put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", "1.0"); }}); }});
             put("PartyLegalEntity", new ArrayList<Object>() {{ add(partyLegalEntity.toMap()); }});
             put("Contact", new ArrayList<Object>() {{ add(contact.toMap()); }});
         }};
