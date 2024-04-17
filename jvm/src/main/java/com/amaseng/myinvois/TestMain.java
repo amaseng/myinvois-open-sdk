@@ -14,6 +14,7 @@ public class TestMain {
                 "INV12345",
                 new Date(),
                 "01",
+                "MYR",
                 new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
                 new Contact("+60-123456789", "general.ams@supplier.com")
             );
