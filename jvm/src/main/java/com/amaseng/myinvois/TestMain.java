@@ -102,6 +102,10 @@ public class TestMain {
                                 "MYR"
                             )
                     )
+                ),
+                new PaymentMeans(
+                    "01",
+                    new FinancialAccount("1234567890123")
                 )
             );
 
