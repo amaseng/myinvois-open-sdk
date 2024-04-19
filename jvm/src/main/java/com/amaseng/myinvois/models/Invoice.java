@@ -3,7 +3,7 @@ package com.amaseng.myinvois.models;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Invoice {
@@ -82,14 +82,14 @@ public class Invoice {
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss'Z'");
-        return new HashMap<Object, Object>() {{
-            put("ID", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", id); }}); }});
-            put("IssueDate", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", dateFormatter.format(issueDateTime)); }}); }});
-            put("IssueTime", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
-            put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", "1.0"); }}); }});
-            put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
+        return new LinkedHashMap<Object, Object>() {{
+            put("ID", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", id); }}); }});
+            put("IssueDate", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", dateFormatter.format(issueDateTime)); }}); }});
+            put("IssueTime", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
+            put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", "1.0"); }}); }});
+            put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
             put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
-            put("BillingReference", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
+            put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
             put("AdditionalDocumentReference", new ArrayList<Object>() {{
                 for (DocumentReference documentReference : additionalDocumentReference) {
                     add(documentReference.toMap());

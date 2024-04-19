@@ -1,6 +1,6 @@
 package com.amaseng.myinvois.models;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class IndustryClassificationCode {
@@ -21,7 +21,7 @@ public class IndustryClassificationCode {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             put("_", id);
             put("name", name);
         }};

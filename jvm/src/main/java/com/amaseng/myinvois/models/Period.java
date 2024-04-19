@@ -3,7 +3,7 @@ package com.amaseng.myinvois.models;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Period {
@@ -31,19 +31,19 @@ public class Period {
 
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             put("StartDate", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", dateFormatter.format(startDate));
                 }});
             }});
             put("EndDate", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", dateFormatter.format(endDate));
                 }});
             }});
             put("Description", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", description);
                 }});
             }});

@@ -1,7 +1,7 @@
 package com.amaseng.myinvois.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Delivery {
@@ -22,7 +22,7 @@ public class Delivery {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             put("DeliveryParty", new ArrayList<Object>() {{ add(deliveryParty.toMap()); }});
             put("Shipment", new ArrayList<Object>() {{ add(shipment.toMap()); }});
         }};

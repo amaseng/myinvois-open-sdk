@@ -1,7 +1,7 @@
 package com.amaseng.myinvois.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PartyLegalEntity {
@@ -16,9 +16,9 @@ public class PartyLegalEntity {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             put("RegistrationName", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", registrationName);
                 }});
             }});

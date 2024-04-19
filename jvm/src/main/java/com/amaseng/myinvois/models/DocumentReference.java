@@ -2,7 +2,7 @@ package com.amaseng.myinvois.models;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,19 +31,19 @@ public class DocumentReference {
 
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             put("ID", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", id);
                 }});
             }});
             documentType.ifPresent(s -> put("DocumentType", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", s);
                 }});
             }}));
             documentDescription.ifPresent(s -> put("DocumentDescription", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", s);
                 }});
             }}));

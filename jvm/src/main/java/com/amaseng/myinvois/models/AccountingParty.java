@@ -2,7 +2,7 @@ package com.amaseng.myinvois.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AccountingParty {
@@ -47,11 +47,11 @@ public class AccountingParty {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             if (additionalAccountID != null && additionalAccountID.length > 0)
                 put("AdditionalAccountID", Arrays.stream(additionalAccountID).map(AccountID::toMap).toArray());
             put("Party", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     if (industryClassificationCode != null && industryClassificationCode.length > 0)
                         put("IndustryClassificationCode", Arrays.stream(industryClassificationCode).map(IndustryClassificationCode::toMap).toArray());
                     put("PartyIdentification", Arrays.stream(partyIdentification).map(PartyIdentification::toMap).toArray());

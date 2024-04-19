@@ -1,8 +1,6 @@
 package com.amaseng.myinvois.models;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AccountID {
@@ -23,7 +21,7 @@ public class AccountID {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             put("_", id);
             put("schemeAgencyName", schemeAgencyName);
         }};

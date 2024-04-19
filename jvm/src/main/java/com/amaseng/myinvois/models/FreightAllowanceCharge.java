@@ -2,7 +2,7 @@ package com.amaseng.myinvois.models;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FreightAllowanceCharge {
@@ -35,10 +35,10 @@ public class FreightAllowanceCharge {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
-            put("ChargeIndicator", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", chargeIndicator); }}); }});
-            put("AllowanceChargeReason", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", allowanceChargeReason); }}); }});
-            put("Amount", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
+            put("ChargeIndicator", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", chargeIndicator); }}); }});
+            put("AllowanceChargeReason", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", allowanceChargeReason); }}); }});
+            put("Amount", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{
                 put("_", amount);
                 put("currencyID", currencyID);
             }}); }});

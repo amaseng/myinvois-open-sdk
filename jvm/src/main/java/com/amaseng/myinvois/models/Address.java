@@ -2,7 +2,7 @@ package com.amaseng.myinvois.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Address {
@@ -41,11 +41,11 @@ public class Address {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
-            put("CityName", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", cityName); }}); }});
-            put("PostalZone", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", postalZone); }}); }});
-            put("CountrySubentityCode", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", countrySubentityCode); }}); }});
-            put("AddressLine", Arrays.stream(addressLine).map(line -> new HashMap<Object, Object>() {{ put("Line", new ArrayList<Object>() {{ add(new HashMap<Object, Object>() {{ put("_", line); }}); }}); }}).toArray());
+        return new LinkedHashMap<Object, Object>() {{
+            put("CityName", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", cityName); }}); }});
+            put("PostalZone", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", postalZone); }}); }});
+            put("CountrySubentityCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", countrySubentityCode); }}); }});
+            put("AddressLine", Arrays.stream(addressLine).map(line -> new LinkedHashMap<Object, Object>() {{ put("Line", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", line); }}); }}); }}).toArray());
             put("Country", new ArrayList<Object>() {{ add(country.toMap()); }});
         }};
     }

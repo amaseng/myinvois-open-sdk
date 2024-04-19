@@ -1,7 +1,7 @@
 package com.amaseng.myinvois.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Country {
@@ -28,9 +28,9 @@ public class Country {
     }
 
     public Map<Object, Object> toMap() {
-        return new HashMap<Object, Object>() {{
+        return new LinkedHashMap<Object, Object>() {{
             put("IdentificationCode", new ArrayList<Object>() {{
-                add(new HashMap<Object, Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
                     put("_", identificationCode);
                     put("listID", listID);
                     put("listAgencyID", listAgencyID);
