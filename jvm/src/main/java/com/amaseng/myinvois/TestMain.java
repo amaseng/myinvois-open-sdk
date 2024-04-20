@@ -135,6 +135,7 @@ public class TestMain {
                             new MonetaryAmount(new BigDecimal("87.63"), "MYR"),
                             new TaxCategory(
                                 "E",
+                                new BigDecimal("6.00"),
                                 new TaxScheme(
                                     "OTH",
                                     "UN/ECE 5153",
@@ -152,7 +153,56 @@ public class TestMain {
                     new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
                     new MonetaryAmount(new BigDecimal("0.30"), "MYR"),
                     new MonetaryAmount(new BigDecimal("1436.50"), "MYR")
-                )
+                ),
+                new InvoiceLine[] {
+                    new InvoiceLine(
+                            "1234",
+                            new QuantityUnit(new BigDecimal("1"), "C62"),
+                            new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
+                            new Charge[] {
+                                new Charge(
+                                    false,
+                                    "Sample Description",
+                                    Optional.of(new BigDecimal("0.15")),
+                                    new MonetaryAmount(new BigDecimal("100"), "MYR")
+                                ),
+                                new Charge(
+                                    true,
+                                    "Sample Description",
+                                    Optional.of(new BigDecimal("0.15")),
+                                    new MonetaryAmount(new BigDecimal("100"), "MYR")
+                                )
+                            },
+                            new TaxTotal(
+                                new MonetaryAmount(new BigDecimal("1460.50"), "MYR"),
+                                new TaxSubTotal[] {
+                                    new TaxSubTotal(
+                                        new MonetaryAmount(new BigDecimal("1460.50"), "MYR"),
+                                        new MonetaryAmount(new BigDecimal("0.00"), "MYR"),
+                                        new TaxCategory(
+                                            "E",
+                                            new BigDecimal("6.00"),
+                                            new TaxScheme(
+                                                "OTH",
+                                                "UN/ECE 5153",
+                                                "6"
+                                            )
+                                        )
+                                    )
+                                }
+                            ),
+                            new Item(
+                                new ItemClassificationCode[] {
+                                    new ItemClassificationCode("12344321", "PTC"),
+                                    new ItemClassificationCode("12344321", "CLASS")
+                                },
+                                "Laptop Peripherals",
+                                "MYS"
+                            ),
+                            new MonetaryAmount(new BigDecimal("17"), "MYR"),
+                            new MonetaryAmount(new BigDecimal("100"), "MYR")
+                    )
+                }
             );
 
         ObjectMapper mapper = new ObjectMapper();

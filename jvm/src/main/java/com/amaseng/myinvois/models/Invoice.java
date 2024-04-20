@@ -20,11 +20,12 @@ public class Invoice {
     private Charge[] allowanceCharge;
     private TaxTotal taxTotal;
     private LegalMonetaryTotal legalMonetaryTotal;
+    private InvoiceLine[] invoiceLine;
 
     public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod,
                    DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty,
                    AccountingParty accountingCustomerParty, Delivery delivery, PaymentMeans paymentMeans, PaymentTerms paymentTerms,
-                   Payment prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal, LegalMonetaryTotal legalMonetaryTotal) {
+                   Payment prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal, LegalMonetaryTotal legalMonetaryTotal, InvoiceLine[] invoiceLine) {
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
@@ -41,6 +42,7 @@ public class Invoice {
         this.allowanceCharge = allowanceCharge;
         this.taxTotal = taxTotal;
         this.legalMonetaryTotal = legalMonetaryTotal;
+        this.invoiceLine = invoiceLine;
     }
 
     public String getId() {
@@ -107,6 +109,10 @@ public class Invoice {
         return legalMonetaryTotal;
     }
 
+    public InvoiceLine[] getInvoiceLine() {
+        return invoiceLine;
+    }
+
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss'Z'");
@@ -118,11 +124,7 @@ public class Invoice {
             put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
             put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
             put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
-            put("AdditionalDocumentReference", new ArrayList<Object>() {{
-                for (DocumentReference documentReference : additionalDocumentReference) {
-                    add(documentReference.toMap());
-                }
-            }});
+            put("AdditionalDocumentReference", Arrays.stream(additionalDocumentReference).map(DocumentReference::toMap).toArray());
             put("AccountingSupplierParty", new ArrayList<Object>() {{ add(accountingSupplierParty.toMap()); }});
             put("AccountingCustomerParty", new ArrayList<Object>() {{ add(accountingCustomerParty.toMap()); }});
             put("Delivery", new ArrayList<Object>() {{ add(delivery.toMap()); }});
@@ -133,6 +135,7 @@ public class Invoice {
                 put("AllowanceCharge", Arrays.stream(allowanceCharge).map(Charge::toMap).toArray());
             put("TaxTotal", new ArrayList<Object>() {{ add(taxTotal.toMap()); }});
             put("LegalMonetaryTotal", new ArrayList<Object>() {{ add(legalMonetaryTotal.toMap()); }});
+            put("InvoiceLine", Arrays.stream(invoiceLine).map(InvoiceLine::toMap).toArray());
         }};
     }
 }
