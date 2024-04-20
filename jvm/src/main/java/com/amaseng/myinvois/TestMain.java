@@ -143,6 +143,15 @@ public class TestMain {
                             )
                         )
                     }
+                ),
+                new LegalMonetaryTotal(
+                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
+                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
+                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
+                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
+                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
+                    new MonetaryAmount(new BigDecimal("0.30"), "MYR"),
+                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR")
                 )
             );
 

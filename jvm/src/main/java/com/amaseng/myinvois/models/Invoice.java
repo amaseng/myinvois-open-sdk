@@ -19,11 +19,12 @@ public class Invoice {
     private Payment prepaidPayment;
     private Charge[] allowanceCharge;
     private TaxTotal taxTotal;
+    private LegalMonetaryTotal legalMonetaryTotal;
 
     public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod,
                    DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty,
                    AccountingParty accountingCustomerParty, Delivery delivery, PaymentMeans paymentMeans, PaymentTerms paymentTerms,
-                   Payment prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal) {
+                   Payment prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal, LegalMonetaryTotal legalMonetaryTotal) {
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
@@ -39,6 +40,7 @@ public class Invoice {
         this.prepaidPayment = prepaidPayment;
         this.allowanceCharge = allowanceCharge;
         this.taxTotal = taxTotal;
+        this.legalMonetaryTotal = legalMonetaryTotal;
     }
 
     public String getId() {
@@ -101,6 +103,10 @@ public class Invoice {
         return taxTotal;
     }
 
+    public LegalMonetaryTotal getLegalMonetaryTotal() {
+        return legalMonetaryTotal;
+    }
+
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss'Z'");
@@ -126,7 +132,7 @@ public class Invoice {
             if (allowanceCharge != null && allowanceCharge.length > 0)
                 put("AllowanceCharge", Arrays.stream(allowanceCharge).map(Charge::toMap).toArray());
             put("TaxTotal", new ArrayList<Object>() {{ add(taxTotal.toMap()); }});
-
+            put("LegalMonetaryTotal", new ArrayList<Object>() {{ add(legalMonetaryTotal.toMap()); }});
         }};
     }
 }
