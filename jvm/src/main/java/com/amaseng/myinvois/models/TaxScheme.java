@@ -1,5 +1,9 @@
 package com.amaseng.myinvois.models;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class TaxScheme {
     private String id;
     private String schemeID;
@@ -21,6 +25,16 @@ public class TaxScheme {
 
     public String getSchemeAgencyID() {
         return schemeAgencyID;
+    }
+
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new LinkedHashMap<>();
+        map.put("ID", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{
+            put("_", id);
+            put("schemeID", schemeID);
+            put("schemeAgencyID", schemeAgencyID);
+        }}); }});
+        return map;
     }
 
 }

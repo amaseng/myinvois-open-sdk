@@ -126,7 +126,24 @@ public class TestMain {
                         Optional.empty(),
                          new MonetaryAmount(new BigDecimal("100"), "MYR")
                     )
-                }
+                },
+                new TaxTotal(
+                    new MonetaryAmount(new BigDecimal("87.63"), "MYR"),
+                    new TaxSubTotal[] {
+                        new TaxSubTotal(
+                            new MonetaryAmount(new BigDecimal("87.63"), "MYR"),
+                            new MonetaryAmount(new BigDecimal("87.63"), "MYR"),
+                            new TaxCategory(
+                                "E",
+                                new TaxScheme(
+                                    "OTH",
+                                    "UN/ECE 5153",
+                                    "6"
+                                )
+                            )
+                        )
+                    }
+                )
             );
 
         ObjectMapper mapper = new ObjectMapper();
