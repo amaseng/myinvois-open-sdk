@@ -107,7 +107,12 @@ public class TestMain {
                     "01",
                     new FinancialAccount("1234567890123")
                 ),
-                new PaymentTerms("Payment method is cash")
+                new PaymentTerms("Payment method is cash"),
+                new Payment(
+                    "E12345678912",
+                    new MonetaryAmount(new BigDecimal("1.00"), "MYR"),
+                    new Date()
+                )
             );
 
         ObjectMapper mapper = new ObjectMapper();

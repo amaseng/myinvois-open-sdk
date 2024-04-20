@@ -1,21 +1,31 @@
 package com.amaseng.myinvois.models;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MonetaryAmount {
     private BigDecimal amount;
-    private String currency;
+    private String currencyID;
 
-    public MonetaryAmount(BigDecimal amount, String currency) {
+    public MonetaryAmount(BigDecimal amount, String currencyID) {
         this.amount = amount;
-        this.currency = currency;
+        this.currencyID = currencyID;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getCurrencyID() {
+        return currencyID;
+    }
+
+    public Map<Object, Object> toMap() {
+        Map<Object, Object> map = new LinkedHashMap<>();
+        map.put("_", amount);
+        map.put("currencyID", currencyID);
+        return map;
     }
 }
