@@ -106,7 +106,8 @@ public class TestMain {
                 new PaymentMeans(
                     "01",
                     new FinancialAccount("1234567890123")
-                )
+                ),
+                new PaymentTerms("Payment method is cash")
             );
 
         ObjectMapper mapper = new ObjectMapper();
