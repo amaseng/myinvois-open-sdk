@@ -1,10 +1,7 @@
 package com.amaseng.myinvois.models;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Invoice {
     private String id;
@@ -20,11 +17,12 @@ public class Invoice {
     private PaymentMeans paymentMeans;
     private PaymentTerms paymentTerms;
     private Payment prepaidPayment;
+    private Charge[] allowanceCharge;
 
     public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod,
                    DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty,
                    AccountingParty accountingCustomerParty, Delivery delivery, PaymentMeans paymentMeans, PaymentTerms paymentTerms,
-                   Payment prepaidPayment) {
+                   Payment prepaidPayment, Charge[] allowanceCharge) {
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
@@ -38,6 +36,7 @@ public class Invoice {
         this.paymentMeans = paymentMeans;
         this.paymentTerms = paymentTerms;
         this.prepaidPayment = prepaidPayment;
+        this.allowanceCharge = allowanceCharge;
     }
 
     public String getId() {
@@ -92,6 +91,10 @@ public class Invoice {
         return prepaidPayment;
     }
 
+    public Charge[] getAllowanceCharge() {
+        return allowanceCharge;
+    }
+
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss'Z'");
@@ -114,6 +117,8 @@ public class Invoice {
             put("PaymentMeans", new ArrayList<Object>() {{ add(paymentMeans.toMap()); }});
             put("PaymentTerms", new ArrayList<Object>() {{ add(paymentTerms.toMap()); }});
             put("PrepaidPayment", new ArrayList<Object>() {{ add(prepaidPayment.toMap()); }});
+            if (allowanceCharge != null && allowanceCharge.length > 0)
+                put("AllowanceCharge", Arrays.stream(allowanceCharge).map(Charge::toMap).toArray());
         }};
     }
 }

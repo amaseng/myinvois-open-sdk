@@ -112,7 +112,21 @@ public class TestMain {
                     "E12345678912",
                     new MonetaryAmount(new BigDecimal("1.00"), "MYR"),
                     new Date()
-                )
+                ),
+                new Charge[] {
+                    new Charge(
+                        false,
+                        "Sample Description",
+                        Optional.empty(),
+                        new MonetaryAmount(new BigDecimal("100"), "MYR")
+                    ),
+                    new Charge(
+                        true,
+                        "Service charge",
+                        Optional.empty(),
+                         new MonetaryAmount(new BigDecimal("100"), "MYR")
+                    )
+                }
             );
 
         ObjectMapper mapper = new ObjectMapper();
