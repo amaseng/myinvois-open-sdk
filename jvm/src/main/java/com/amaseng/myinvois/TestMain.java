@@ -252,6 +252,9 @@ public class TestMain {
         boolean tinValid = api.validateTin();
         System.out.println("##############TIN Valid: " + tinValid);
 
+        // Submit invoice
+        String submissionResponse = api.submitInvoices(new Invoice[] { invoice });
+        System.out.println("##############Submission response: " + submissionResponse);
     }
 
 }
