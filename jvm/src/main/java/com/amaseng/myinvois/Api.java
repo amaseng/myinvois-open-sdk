@@ -15,6 +15,10 @@
  */
 package com.amaseng.myinvois;
 
+import com.amaseng.myinvois.models.Document;
+import com.amaseng.myinvois.models.DocumentSubmission;
+import com.amaseng.myinvois.models.Invoice;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,8 +29,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Api {
     private String baseUrl;
@@ -115,7 +124,8 @@ public class Api {
 
         try {
             // Set the request method
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
             // Enable output for sending request body
             connection.setDoOutput(false);
@@ -124,6 +134,91 @@ public class Api {
             int responseCode = connection.getResponseCode();
 
             return responseCode == 200;
+        } finally {
+            // Close the connection
+            connection.disconnect();
+        }
+    }
+
+    private String base64(String value) {
+        return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private String sha256(String value) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(value.getBytes(StandardCharsets.UTF_8));
+
+        // Convert byte array to hexadecimal string
+        StringBuilder hexString = new StringBuilder();
+        for (byte hashByte : hashBytes) {
+            String hex = Integer.toHexString(0xff & hashByte);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+
+        return hexString.toString();
+    }
+
+    private Document convertInvoice(Invoice invoice) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(invoice.toMap());
+            return new Document("JSON", base64(json), sha256(json), invoice.getId());
+        } catch (JsonProcessingException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String submitInvoices(Invoice[] invoices) throws IOException, JsonProcessingException {
+        Document[] documents = Arrays.stream(invoices).map(this::convertInvoice).toArray(Document[]::new);
+        DocumentSubmission submission = new DocumentSubmission(documents);
+        Map<Object, Object> requestBodyMap = submission.toMap();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestBody = mapper.writerWithDefaultPrettyPrinter()
+                .writeValueAsString(requestBodyMap);
+
+        // Create URL object with the endpoint
+        URL url = new URL(baseUrl + "/api/v1.0/documentsubmissions/");
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        try {
+            // Set the request method
+            connection.setRequestMethod("POST");
+
+            // Set the content type
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            // Enable output for sending request body
+            connection.setDoOutput(true);
+
+            // Write request body to the connection
+            try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
+                byte[] requestBodyBytes = requestBody.getBytes(StandardCharsets.UTF_8);
+                outputStream.write(requestBodyBytes, 0, requestBodyBytes.length);
+            }
+
+            // Get the response code
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == 200) {
+                // Read the response
+                StringBuilder response = new StringBuilder();
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                }
+
+                return response.toString();
+            }
+            else
+                throw new RuntimeException("Failed to get session token. Response code: " + responseCode);
         } finally {
             // Close the connection
             connection.disconnect();
