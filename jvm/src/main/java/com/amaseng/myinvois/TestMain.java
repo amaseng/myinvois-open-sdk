@@ -19,13 +19,20 @@ import com.amaseng.myinvois.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
 
 public class TestMain {
 
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) throws IOException {
+        String clientID = System.getenv("MYINVOIS_CLIENT_ID");
+        if (clientID == null)
+            throw new RuntimeException("Environment variable MYINVOIS_CLIENT_ID not set.");
+        String clientSecret = System.getenv("MYINVOIS_CLIENT_SECRET");
+        if (clientSecret == null)
+            throw new RuntimeException("Environment variable MYINVOIS_CLIENT_SECRET not set.");
         Invoice invoice =
             new Invoice(
                 "INV12345",
@@ -225,6 +232,13 @@ public class TestMain {
                 .writeValueAsString(invoice.toMap());
         System.out.println("##############Test: ");
         System.out.println(jsonResult);
+
+        // Trying to connect to MyInvois
+        Api api = new Api("https://preprod-api.myinvois.hasil.gov.my", clientID, clientSecret);
+
+        // Login to MyInvois
+        String token = api.getSessionToken();
+
     }
 
 }
