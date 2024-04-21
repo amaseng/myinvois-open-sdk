@@ -33,6 +33,15 @@ public class TestMain {
         String clientSecret = System.getenv("MYINVOIS_CLIENT_SECRET");
         if (clientSecret == null)
             throw new RuntimeException("Environment variable MYINVOIS_CLIENT_SECRET not set.");
+        String tin = System.getenv("MYINVOIS_TIN");
+        if (tin == null)
+            throw new RuntimeException("Environment variable MYINVOIS_TIN not set.");
+        String idType = System.getenv("MYINVOIS_ID_TYPE");
+        if (idType == null)
+            throw new RuntimeException("Environment variable MYINVOIS_ID_TYPE not set.");
+        String idValue = System.getenv("MYINVOIS_ID_VALUE");
+        if (idValue == null)
+            throw new RuntimeException("Environment variable MYINVOIS_ID_VALUE not set.");
         Invoice invoice =
             new Invoice(
                 "INV12345",
@@ -230,14 +239,18 @@ public class TestMain {
         ObjectMapper mapper = new ObjectMapper();
         String jsonResult = mapper.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(invoice.toMap());
-        System.out.println("##############Test: ");
+        System.out.println("##############Test JSON: ");
         System.out.println(jsonResult);
 
         // Trying to connect to MyInvois
-        Api api = new Api("https://preprod-api.myinvois.hasil.gov.my", clientID, clientSecret);
+        Api api = new Api("https://preprod-api.myinvois.hasil.gov.my", clientID, clientSecret, tin, idType, idValue);
 
         // Login to MyInvois
-        String token = api.getSessionToken();
+        api.init();
+
+        // Validate TIN
+        boolean tinValid = api.validateTin();
+        System.out.println("##############TIN Valid: " + tinValid);
 
     }
 

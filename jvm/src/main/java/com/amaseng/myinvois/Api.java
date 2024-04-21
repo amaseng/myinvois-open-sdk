@@ -32,14 +32,22 @@ public class Api {
     private String baseUrl;
     private String clientId;
     private String clientSecret;
+    private String tin;
+    private String idType;
+    private String idValue;
 
-    public Api(String baseUrl, String clientId, String clientSecret) {
+    private String accessToken;
+
+    public Api(String baseUrl, String clientId, String clientSecret, String tin, String idType, String idValue) {
         this.baseUrl = baseUrl;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
+        this.tin = tin;
+        this.idType = idType;
+        this.idValue = idValue;
     }
 
-    public String getSessionToken() throws IOException {
+    public void init() throws IOException {
 
         Map<Object, Object> requestBodyMap = new LinkedHashMap<>();
         requestBodyMap.put("grant_type", "client_credentials");
@@ -88,10 +96,34 @@ public class Api {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Map<String, String> map = objectMapper.readValue(response.toString(), new TypeReference<Map<String, String>>() {});
 
-                return map.get("access_token");
+                accessToken = map.get("access_token");
             }
             else
                 throw new RuntimeException("Failed to get session token. Response code: " + responseCode);
+        } finally {
+            // Close the connection
+            connection.disconnect();
+        }
+    }
+
+    public boolean validateTin() throws IOException {
+        // Create URL object with the endpoint
+        URL url = new URL(baseUrl + "/api/v1.0/taxpayer/validate/" + tin + "?idType=" + idType + "&idValue=" + idValue);
+
+        // Open a connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        try {
+            // Set the request method
+            connection.setRequestMethod("POST");
+
+            // Enable output for sending request body
+            connection.setDoOutput(false);
+
+            // Get the response code
+            int responseCode = connection.getResponseCode();
+
+            return responseCode == 200;
         } finally {
             // Close the connection
             connection.disconnect();
