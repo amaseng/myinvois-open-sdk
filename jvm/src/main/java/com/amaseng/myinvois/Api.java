@@ -58,14 +58,7 @@ public class Api {
 
     public void init() throws IOException {
 
-        Map<Object, Object> requestBodyMap = new LinkedHashMap<>();
-        requestBodyMap.put("grant_type", "client_credentials");
-        requestBodyMap.put("clientId", clientId);
-        requestBodyMap.put("clientSecret", clientSecret);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String requestBody = mapper.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(requestBodyMap);
+        String requestBody = "grant_type=client_credentials&client_id=" + clientId + "&client_secret=" + clientSecret + "&scope=InvoicingAPI";
 
         // Create URL object with the endpoint
         URL url = new URL(baseUrl + "/connect/token");
@@ -78,7 +71,7 @@ public class Api {
             connection.setRequestMethod("POST");
 
             // Set the content type
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
             // Enable output for sending request body
             connection.setDoOutput(true);
@@ -87,6 +80,7 @@ public class Api {
             try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
                 byte[] requestBodyBytes = requestBody.getBytes(StandardCharsets.UTF_8);
                 outputStream.write(requestBodyBytes, 0, requestBodyBytes.length);
+                outputStream.flush();
             }
 
             // Get the response code
@@ -101,14 +95,21 @@ public class Api {
                         response.append(inputLine);
                     }
                 }
-
                 ObjectMapper objectMapper = new ObjectMapper();
                 Map<String, String> map = objectMapper.readValue(response.toString(), new TypeReference<Map<String, String>>() {});
 
                 accessToken = map.get("access_token");
             }
-            else
-                throw new RuntimeException("Failed to get session token. Response code: " + responseCode);
+            else {
+                StringBuilder response = new StringBuilder();
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()))) {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                }
+                throw new RuntimeException("Failed to get session token. Response code: " + responseCode + ", message: " + connection.getResponseMessage() + ", content: " + response.toString());
+            }
         } finally {
             // Close the connection
             connection.disconnect();
