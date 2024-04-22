@@ -114,7 +114,7 @@ public class Api {
             // Set the request method
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Accept-Language", "en " + accessToken);
+            connection.setRequestProperty("Accept-Language", "en");
             connection.setRequestProperty("Content-type", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
@@ -182,7 +182,7 @@ public class Api {
 
             // Set the content type
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Accept-Language", "en " + accessToken);
+            connection.setRequestProperty("Accept-Language", "en");
             connection.setRequestProperty("Content-type", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
