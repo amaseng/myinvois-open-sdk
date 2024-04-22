@@ -75,7 +75,7 @@ public class TestMain {
                         },
                         new Country("MYS", "ISO3166-1", "6")
                     ),
-                    new PartyLegalEntity("AMS Setia Jaya Sdn. Bhd."),
+                    new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
                     new Contact("+60-123456789", "general.ams@supplier.com"),
                     new AccountID[] {
                         new AccountID("CPT-CCN-W-211111-KL-000002", "CertEX")
