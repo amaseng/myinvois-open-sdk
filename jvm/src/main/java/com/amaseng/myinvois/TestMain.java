@@ -249,12 +249,12 @@ public class TestMain {
         api.init();
 
         // Validate TIN
-        //boolean tinValid = api.validateTin();
-        //System.out.println("##############TIN Valid: " + tinValid);
+        boolean tinValid = api.validateTin();
+        System.out.println("##############TIN Valid: " + tinValid);
 
         // Submit invoice
-        //String submissionResponse = api.submitInvoices(new Invoice[] { invoice });
-        //System.out.println("##############Submission response: " + submissionResponse);
+        String submissionResponse = api.submitInvoices(new Invoice[] { invoice });
+        System.out.println("##############Submission response: " + submissionResponse);
     }
 
 }

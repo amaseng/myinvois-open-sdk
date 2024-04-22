@@ -22,10 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -85,31 +82,23 @@ public class Api {
 
             // Get the response code
             int responseCode = connection.getResponseCode();
+            StringBuilder response = new StringBuilder();
+            // Read the response
+            InputStream inputStream = responseCode == 200 ? connection.getInputStream() : connection.getErrorStream();
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+            }
 
             if (responseCode == 200) {
-                // Read the response
-                StringBuilder response = new StringBuilder();
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                }
                 ObjectMapper objectMapper = new ObjectMapper();
                 Map<String, String> map = objectMapper.readValue(response.toString(), new TypeReference<Map<String, String>>() {});
-
                 accessToken = map.get("access_token");
             }
-            else {
-                StringBuilder response = new StringBuilder();
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()))) {
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                }
+            else
                 throw new RuntimeException("Failed to get session token. Response code: " + responseCode + ", message: " + connection.getResponseMessage() + ", content: " + response.toString());
-            }
         } finally {
             // Close the connection
             connection.disconnect();
@@ -126,6 +115,9 @@ public class Api {
         try {
             // Set the request method
             connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Accept-Language", "en " + accessToken);
+            connection.setRequestProperty("Content-type", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
             // Enable output for sending request body
@@ -133,6 +125,7 @@ public class Api {
 
             // Get the response code
             int responseCode = connection.getResponseCode();
+            System.out.println("#######################debug: " + responseCode);
 
             return responseCode == 200;
         } finally {
