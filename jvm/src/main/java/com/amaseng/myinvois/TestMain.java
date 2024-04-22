@@ -61,8 +61,8 @@ public class TestMain {
                         new IndustryClassificationCode("01111", "Growing of maize")
                     },
                     new PartyIdentification[] {
-                        new PartyIdentification("C2584563222", "TIN"),
-                        new PartyIdentification("202001234567", "BRN")
+                        new PartyIdentification(tin, "TIN"),
+                        new PartyIdentification(idValue, idType)
                     },
                     new Address(
                         "Kuala Lumpur",
