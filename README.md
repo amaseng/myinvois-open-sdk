@@ -10,4 +10,4 @@ While this software is provided under the terms of the Apache License, Version 2
 
 At the current state support: 
 
-[JVM - WIP of testing login, validate TIN and submit first document.](jvm/)
+[JVM](jvm/) - Login and validate TIN works, WIP submit first document.
