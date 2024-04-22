@@ -123,7 +123,6 @@ public class Api {
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            System.out.println("#######################debug: " + responseCode);
 
             return responseCode == 200;
         } finally {
@@ -182,7 +181,9 @@ public class Api {
             connection.setRequestMethod("POST");
 
             // Set the content type
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Accept-Language", "en " + accessToken);
+            connection.setRequestProperty("Content-type", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
             // Enable output for sending request body
