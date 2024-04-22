@@ -30,9 +30,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Api {
     private String baseUrl;
@@ -198,21 +196,21 @@ public class Api {
 
             // Get the response code
             int responseCode = connection.getResponseCode();
+            InputStream inputStream = responseCode == 200 ? connection.getInputStream() : connection.getErrorStream();
+            // Read the response
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+            }
 
             if (responseCode == 200) {
-                // Read the response
-                StringBuilder response = new StringBuilder();
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                }
-
                 return response.toString();
             }
             else
-                throw new RuntimeException("Failed to get session token. Response code: " + responseCode);
+                throw new RuntimeException("Failed to submit document. Response code: " + responseCode + ", message: " + connection.getResponseMessage() + ", content: " + response.toString());
         } finally {
             // Close the connection
             connection.disconnect();
