@@ -132,25 +132,34 @@ public class Invoice {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss'Z'");
         return new LinkedHashMap<Object, Object>() {{
-            put("ID", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", id); }}); }});
-            put("IssueDate", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", dateFormatter.format(issueDateTime)); }}); }});
-            put("IssueTime", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
-            put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", "1.0"); }}); }});
-            put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
-            put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
-            put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
-            put("AdditionalDocumentReference", Arrays.stream(additionalDocumentReference).map(DocumentReference::toMap).toArray());
-            put("AccountingSupplierParty", new ArrayList<Object>() {{ add(accountingSupplierParty.toMap()); }});
-            put("AccountingCustomerParty", new ArrayList<Object>() {{ add(accountingCustomerParty.toMap()); }});
-            put("Delivery", new ArrayList<Object>() {{ add(delivery.toMap()); }});
-            put("PaymentMeans", new ArrayList<Object>() {{ add(paymentMeans.toMap()); }});
-            put("PaymentTerms", new ArrayList<Object>() {{ add(paymentTerms.toMap()); }});
-            put("PrepaidPayment", new ArrayList<Object>() {{ add(prepaidPayment.toMap()); }});
-            if (allowanceCharge != null && allowanceCharge.length > 0)
-                put("AllowanceCharge", Arrays.stream(allowanceCharge).map(Charge::toMap).toArray());
-            put("TaxTotal", new ArrayList<Object>() {{ add(taxTotal.toMap()); }});
-            put("LegalMonetaryTotal", new ArrayList<Object>() {{ add(legalMonetaryTotal.toMap()); }});
-            put("InvoiceLine", Arrays.stream(invoiceLine).map(InvoiceLine::toMap).toArray());
+            put("_D", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            put("_A", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            put("_B", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+            put("Invoice", new ArrayList<Object>() {{
+                add(
+                    new LinkedHashMap<Object, Object>() {{
+                        put("ID", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", id); }}); }});
+                        put("IssueDate", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", dateFormatter.format(issueDateTime)); }}); }});
+                        put("IssueTime", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
+                        put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", "1.0"); }}); }});
+                        put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
+                        put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
+                        put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
+                        put("AdditionalDocumentReference", Arrays.stream(additionalDocumentReference).map(DocumentReference::toMap).toArray());
+                        put("AccountingSupplierParty", new ArrayList<Object>() {{ add(accountingSupplierParty.toMap()); }});
+                        put("AccountingCustomerParty", new ArrayList<Object>() {{ add(accountingCustomerParty.toMap()); }});
+                        put("Delivery", new ArrayList<Object>() {{ add(delivery.toMap()); }});
+                        put("PaymentMeans", new ArrayList<Object>() {{ add(paymentMeans.toMap()); }});
+                        put("PaymentTerms", new ArrayList<Object>() {{ add(paymentTerms.toMap()); }});
+                        put("PrepaidPayment", new ArrayList<Object>() {{ add(prepaidPayment.toMap()); }});
+                        if (allowanceCharge != null && allowanceCharge.length > 0)
+                            put("AllowanceCharge", Arrays.stream(allowanceCharge).map(Charge::toMap).toArray());
+                        put("TaxTotal", new ArrayList<Object>() {{ add(taxTotal.toMap()); }});
+                        put("LegalMonetaryTotal", new ArrayList<Object>() {{ add(legalMonetaryTotal.toMap()); }});
+                        put("InvoiceLine", Arrays.stream(invoiceLine).map(InvoiceLine::toMap).toArray());
+                    }}
+                );
+            }});
         }};
     }
 }
