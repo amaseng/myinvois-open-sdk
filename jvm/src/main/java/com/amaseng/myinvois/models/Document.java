@@ -49,10 +49,10 @@ public class Document {
 
     public Map<Object, Object> toMap() {
         return new LinkedHashMap<Object, Object>() {{
-            put("Format", format);
-            put("Document", document);
-            put("DocumentHash", documentHash);
-            put("CodeNumber", codeNumber);
+            put("format", format);
+            put("document", document);
+            put("documentHash", documentHash);
+            put("codeNumber", codeNumber);
         }};
     }
 
