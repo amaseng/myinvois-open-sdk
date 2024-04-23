@@ -55,7 +55,7 @@ public class Charge {
         Map<Object, Object> map = new LinkedHashMap<>();
         map.put("ChargeIndicator", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", chargeIndicator); }}); }});
         map.put("AllowanceChargeReason", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", allowanceChargeReason); }}); }});
-        multiplierFactorNumeric.ifPresent(multiplierFactorNumeric -> map.put("MultiplierFactorNumeric", new ArrayList<Object>() {{ add(multiplierFactorNumeric); }}));
+        multiplierFactorNumeric.ifPresent(multiplierFactorNumeric -> map.put("MultiplierFactorNumeric", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", multiplierFactorNumeric); }} ); }}));
         map.put("Amount", new ArrayList<Object>() {{ add(amount.toMap()); }});
         return map;
     }
