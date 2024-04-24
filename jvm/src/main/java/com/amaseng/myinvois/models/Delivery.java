@@ -20,15 +20,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Delivery {
-    private AccountingParty deliveryParty;
+    private Party deliveryParty;
     private Shipment shipment;
 
-    public Delivery(AccountingParty deliveryParty, Shipment shipment) {
+    public Delivery(Party deliveryParty, Shipment shipment) {
         this.deliveryParty = deliveryParty;
         this.shipment = shipment;
     }
 
-    public AccountingParty getDeliveryParty() {
+    public Party getDeliveryParty() {
         return deliveryParty;
     }
 

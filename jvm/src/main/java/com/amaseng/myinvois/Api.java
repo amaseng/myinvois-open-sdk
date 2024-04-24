@@ -155,6 +155,7 @@ public class Api {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writerWithDefaultPrettyPrinter()
                     .writeValueAsString(invoice.toMap());
+            System.out.println("####Invoice JSON: " + json);
             return new Document("JSON", base64(json), sha256(json), invoice.getId());
         } catch (JsonProcessingException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);

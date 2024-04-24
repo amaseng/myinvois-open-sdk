@@ -57,31 +57,34 @@ public class TestMain {
                     new DocumentReference("CIF", Optional.empty(), Optional.empty())
                 },
                 new AccountingParty(
-                    new IndustryClassificationCode[] {
-                        new IndustryClassificationCode("01111", "Growing of maize")
-                    },
-                    new PartyIdentification[] {
-                        new PartyIdentification(tin, "TIN"),
-                        new PartyIdentification(idValue, idType)
-                    },
-                    new Address(
-                        "Kuala Lumpur",
-                        "50480",
-                        "14",
-                        new String[] {
-                            "Lot 66",
-                            "Bangunan Merdeka",
-                            "Persiaran Jaya"
+                    new Party(
+                        new IndustryClassificationCode[] {
+                                new IndustryClassificationCode("01111", "Growing of maize")
                         },
-                        new Country("MYS", "ISO3166-1", "6")
+                        new PartyIdentification[] {
+                                new PartyIdentification(tin, "TIN"),
+                                new PartyIdentification(idValue, idType)
+                        },
+                        new Address(
+                                "Kuala Lumpur",
+                                "50480",
+                                "14",
+                                new String[] {
+                                        "Lot 66",
+                                        "Bangunan Merdeka",
+                                        "Persiaran Jaya"
+                                },
+                                new Country("MYS", "ISO3166-1", "6")
+                        ),
+                        new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
+                        new Contact("+60-123456789", "general.ams@supplier.com")
                     ),
-                    new PartyLegalEntity("AmaSeng Software Sdn. Bhd."),
-                    new Contact("+60-123456789", "general.ams@supplier.com"),
                     new AccountID[] {
                         new AccountID("CPT-CCN-W-211111-KL-000002", "CertEX")
                     }
                 ),
                 new AccountingParty(
+                    new Party(
                         new IndustryClassificationCode[] {}, // TODO: Skip when empty
                         new PartyIdentification[] {
                                 new PartyIdentification("C2584563200", "TIN"),
@@ -99,11 +102,12 @@ public class TestMain {
                                 new Country("MYS", "ISO3166-1", "6")
                         ),
                         new PartyLegalEntity("AMS Setia Jaya Sdn. Bhd."),
-                        new Contact("+60-123456789", "name@buyer.com"),
-                        new AccountID[] {}
+                        new Contact("+60-123456789", "name@buyer.com")
+                    ),
+                    new AccountID[] {}
                 ),
                 new Delivery(
-                    new AccountingParty(
+                    new Party(
                         new IndustryClassificationCode[] {}, // TODO: Skip when empty
                         new PartyIdentification[] {
                                 new PartyIdentification("C2584563200", "TIN"),
@@ -121,8 +125,7 @@ public class TestMain {
                                 new Country("MYS", "ISO3166-1", "6")
                         ),
                         new PartyLegalEntity("Greenz Sdn. Bhd."),
-                        new Contact("+60-123456789", "name@buyer.com"),
-                        new AccountID[] {}
+                        new Contact("+60-123456789", "name@buyer.com")
                     ),
                     new Shipment(
                         "1234",
@@ -239,8 +242,6 @@ public class TestMain {
         ObjectMapper mapper = new ObjectMapper();
         String jsonResult = mapper.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(invoice.toMap());
-        System.out.println("##############Test JSON: ");
-        System.out.println(jsonResult);
 
         // Trying to connect to MyInvois
         Api api = new Api("https://preprod-api.myinvois.hasil.gov.my", clientID, clientSecret, tin, idType, idValue);
