@@ -198,7 +198,7 @@ public class Api {
 
             // Get the response code
             int responseCode = connection.getResponseCode();
-            InputStream inputStream = responseCode == 200 ? connection.getInputStream() : connection.getErrorStream();
+            InputStream inputStream = responseCode == 202 ? connection.getInputStream() : connection.getErrorStream();
             // Read the response
             StringBuilder response = new StringBuilder();
             try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -208,7 +208,7 @@ public class Api {
                 }
             }
 
-            if (responseCode == 200) {
+            if (responseCode == 202) {
                 return response.toString();
             }
             else

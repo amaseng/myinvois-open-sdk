@@ -44,7 +44,7 @@ public class TestMain {
             throw new RuntimeException("Environment variable MYINVOIS_ID_VALUE not set.");
         Invoice invoice =
             new Invoice(
-                "INV12345",
+                "INV12347",
                 new Date(),
                 "01",
                 "MYR",
