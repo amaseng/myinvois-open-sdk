@@ -11,5 +11,5 @@ Open Java SDK for MyInvois API
 > export MYINVOIS_ID_TYPE=<your-id-type>
 > export MYINVOIS_ID_VALUE=<your-id-value>
 > mvn compile
-> mvn exec:java -Dexec.mainClass="com.amaseng.myinvois.TestMain"
+> mvn exec:java -D"exec.mainClass"="com.amaseng.myinvois.TestMain"
 ```
