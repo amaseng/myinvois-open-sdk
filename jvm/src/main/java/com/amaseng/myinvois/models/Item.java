@@ -48,9 +48,13 @@ public class Item {
         if (itemClassificationCode != null && itemClassificationCode.length > 0)
             map.put("CommodityClassification", Arrays.stream(itemClassificationCode).map(ItemClassificationCode::toMap).toArray());
         map.put("Description", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", description); }}); }});
-        map.put("OriginCountry", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("IdentificationCode", new LinkedHashMap<Object, Object>() {{
-            put("_", originCountryCode);
-        }}); }}); }});
+        map.put("OriginCountry", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{
+            put("IdentificationCode", new ArrayList<Object>() {{
+                add(new LinkedHashMap<Object, Object>() {{
+                    put("_", originCountryCode);
+                }});
+            }});
+        }}); }});
         return map;
     }
 }
