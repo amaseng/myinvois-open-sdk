@@ -55,8 +55,4 @@ public class Document {
             put("codeNumber", codeNumber);
         }};
     }
-
-    public Document fromInvoice(Invoice invoice) {
-        return new Document("JSON", invoice.toMap().toString(), "1234567890", "1234567890");
-    }
 }
