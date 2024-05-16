@@ -21,12 +21,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
 public class TestMain {
 
     public static void main(String[] args) throws IOException {
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        
+        // Subtract 8 hours
+        calendar.add(Calendar.MINUTE, -480);
+        Date eightHoursEarlier = calendar.getTime();
+        System.out.println(eightHoursEarlier);
         String clientID = System.getenv("MYINVOIS_CLIENT_ID");
         if (clientID == null)
             throw new RuntimeException("Environment variable MYINVOIS_CLIENT_ID not set.");
@@ -43,9 +51,9 @@ public class TestMain {
         if (idValue == null)
             throw new RuntimeException("Environment variable MYINVOIS_ID_VALUE not set.");
         Invoice invoice =
-            new Invoice(
+            new Invoice(       
                 "INV12347",
-                new Date(),
+                    eightHoursEarlier,
                 "01",
                 "MYR",
                 new Period(new Date(), new Date(), "Monthly"),
@@ -174,7 +182,8 @@ public class TestMain {
                                     "OTH",
                                     "UN/ECE 5153",
                                     "6"
-                                )
+                                ), 
+                                Optional.empty()
                             )
                         )
                     }
@@ -220,15 +229,16 @@ public class TestMain {
                                                 "OTH",
                                                 "UN/ECE 5153",
                                                 "6"
-                                            )
+                                            ),
+                                            Optional.of("Exempt New Means of Transport")
                                         )
                                     )
                                 }
                             ),
                             new Item(
                                 new ItemClassificationCode[] {
-                                    new ItemClassificationCode("12344321", "PTC"),
-                                    new ItemClassificationCode("12344321", "CLASS")
+                                    new ItemClassificationCode("002", "PTC"),
+                                    new ItemClassificationCode("003", "CLASS")
                                 },
                                 "Laptop Peripherals",
                                 "MYS"

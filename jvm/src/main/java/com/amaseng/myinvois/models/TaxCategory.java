@@ -19,16 +19,19 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class TaxCategory {
     private String id;
     private BigDecimal percent;
     private TaxScheme taxScheme;
+    private Optional<String> taxExemptionReason;
 
-    public TaxCategory(String id, BigDecimal percent, TaxScheme taxScheme) {
+    public TaxCategory(String id, BigDecimal percent, TaxScheme taxScheme , Optional<String> taxExemptionReason ) {
         this.id = id;
         this.percent = percent;
         this.taxScheme = taxScheme;
+        this.taxExemptionReason = taxExemptionReason;
     }
 
     public String getId() {
@@ -43,11 +46,17 @@ public class TaxCategory {
         return taxScheme;
     }
 
+    public Optional<String> getTaxExemptionReason()
+    {
+        return taxExemptionReason;
+    }
+
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new LinkedHashMap<>();
         map.put("ID", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", id); }}); }});
         map.put("Percent", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", percent); }}); }});
         map.put("TaxScheme", new ArrayList<Object>() {{ add(taxScheme.toMap()); }});
+        taxExemptionReason.ifPresent(taxExemptionReason -> map.put("TaxExemptionReason", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", taxExemptionReason); }}); }}));
         return map;
     }
 }
