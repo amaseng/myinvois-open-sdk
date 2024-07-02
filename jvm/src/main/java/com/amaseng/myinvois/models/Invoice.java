@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Invoice {
+    private UBLExtensions ublExtensions;
     private String id;
     private Date issueDateTime;
     private String invoiceTypeCode;
@@ -36,11 +37,12 @@ public class Invoice {
     private TaxTotal taxTotal;
     private LegalMonetaryTotal legalMonetaryTotal;
     private InvoiceLine[] invoiceLine;
-
-    public Invoice(String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod,
+    
+    public Invoice(UBLExtensions ublExtensions, String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod,
                    DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty,
                    AccountingParty accountingCustomerParty, Delivery delivery, PaymentMeans paymentMeans, PaymentTerms paymentTerms,
                    Payment prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal, LegalMonetaryTotal legalMonetaryTotal, InvoiceLine[] invoiceLine) {
+        this.ublExtensions = ublExtensions;
         this.id = id;
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
@@ -58,6 +60,10 @@ public class Invoice {
         this.taxTotal = taxTotal;
         this.legalMonetaryTotal = legalMonetaryTotal;
         this.invoiceLine = invoiceLine;
+    }
+
+    public UBLExtensions getUBLExtensions() {
+        return ublExtensions;
     }
 
     public String getId() {
@@ -138,6 +144,7 @@ public class Invoice {
             put("Invoice", new ArrayList<Object>() {{
                 add(
                     new LinkedHashMap<Object, Object>() {{
+                        put("UBLExtensions", new ArrayList<Object>() {{ add(ublExtensions.toMap()); }});
                         put("ID", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", id); }}); }});
                         put("IssueDate", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", dateFormatter.format(issueDateTime)); }}); }});
                         put("IssueTime", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
