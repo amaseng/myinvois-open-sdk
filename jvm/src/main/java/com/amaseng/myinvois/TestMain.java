@@ -49,10 +49,51 @@ public class TestMain {
             throw new RuntimeException("Environment variable MYINVOIS_ID_TYPE not set.");
         String idValue = System.getenv("MYINVOIS_ID_VALUE");
         if (idValue == null)
-            throw new RuntimeException("Environment variable MYINVOIS_ID_VALUE not set.");
+            throw new RuntimeException("Environment variable MYINVOIS_ID_VALUE not set.");       
         Invoice invoice =
-            new Invoice(       
-                "INV12347",
+            new Invoice(
+                new UBLExtensions(
+                    new Signature(
+                        new SignedInfo(
+                            "",
+                            "https://www.w3.org/TR/xml-c14n11/#",
+                            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+                            new Reference[] {
+                                new Reference(Optional.of(new Transform("\n            count(ancestor-or-self::sig:UBLDocumentSignatures |\n                  here()/ancestor::sig:UBLDocumentSignatures[1]) >\n            count(ancestor-or-self::sig:UBLDocumentSignatures)\n          ")),
+                                                                        "",
+                                                                        "lRvowcWB3XXtUJ+JSXjk6PtE5hKSdiW7igbiRGzM9Q4="
+                                            ),
+                                new Reference(Optional.empty(),"","HPX9xRImQt+EsjpV7MMkLlbr4+XwuKMIbjTgwtJT9L0=")
+                            }
+                        ),
+                        "efDwyedehRoPJiUsW9tO//fKshj5NdYRzrAiW542ASp4NiEnV0yEfjP7xyDpdoTJ8MZVSQ1NRbkeoIfaKBz0JJz4TLNB4woOosOq1Zp8sZdWLCSdbRtbgF1bPpFatU3ZtfzEGkU8Gao+iZo220GA1czbE8gR2dY6P6pwHvqfyyqU3w//A3kzG46qODik6GSbKrkx/0/HsX8I/j36eBc6gzcBT9SVPA8L2LNlEYJO7vFOEqwu4nSBsHvrvzfYKBgdAx/+ah1RBT/mb9547Li7tFvENhFFukUA/d2JOqtd9KLrCWlVDV7DylhcVAGtwb8WJa+3727miUIEnNxkED3OgA==",
+                        new KeyInfo(
+                            new RSAKeyValue("lgC/GTsbYaTfau8S9LZxK+edhqWyA98jmB222/rfOXsKHuJ20C+2Csy0k1l7fpmF8EVfd0w/BYUtq1b6qgTQiw4v4fyNNLHrQNQubpbWwoGa/cw3ImFBP/ORmpKjBQLRl9jNMgv1mDRzrFqflVKxVd6jyOyha52BH5Ubvm34XIUI0Dv9Dfr0Pvrsf9M64wCDReOwdhH1rNCYj3w+POXXoBB7oloCrLWp+M3NtrRnGwRSo6KDEXYEtClkmaLimo+y2E3BSGLmzQk6XuMBI7RvO2yw8pQhUjNonfb4hzTqcLu1iRmwtVrXIrRi3ExGmOePPvWzGclEgoqMYhZ2XgkmkQ==",
+                                            "AQAB"
+                                        ),
+                            new X509Data(
+                                "Ldu7Y9CrD1qnttYozm/2FEmhwX1Q5J3edA0oRumqSF0=",
+                                "CN=Amaseng, OU=Amaseng, O=Amaseng",
+                                new X509IssuerSerial("CN=Amaseng, OU=Amaseng, O=Amaseng","5154F41F5C1F0309675CBA5B447201904D697CA0")
+                            )
+                        ),
+                        new QualifyingProperties(
+                            new SignedSignatureProperties(
+                                "2024-06-25T12:05:31.8595902+08:00",
+                                new SigningCertificate(
+                                    new Cert(
+                                        new CertDigest("","Ldu7Y9CrD1qnttYozm/2FEmhwX1Q5J3edA0oRumqSF0="),
+                                        new IssuerSerial("CN=Amaseng, OU=Amaseng, O=Amaseng","5154F41F5C1F0309675CBA5B447201904D697CA0")
+                                    )
+                                )
+                            ),
+                            new UnsignedProperties(
+                                ""
+                            )
+                        )
+                    )
+                ), 
+                "INV1111",
                     eightHoursEarlier,
                 "01",
                 "MYR",
