@@ -45,6 +45,8 @@ public class Period {
     }
 
     public Map<Object, Object> toMap() {
+        System.out.println(startDate);
+        System.out.println(endDate);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         return new LinkedHashMap<Object, Object>() {{
             put("StartDate", new ArrayList<Object>() {{

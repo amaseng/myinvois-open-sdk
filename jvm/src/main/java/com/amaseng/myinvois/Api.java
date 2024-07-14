@@ -21,13 +21,13 @@ import com.amaseng.myinvois.models.Invoice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Map;
@@ -155,9 +155,12 @@ public class Api {
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writerWithDefaultPrettyPrinter()
                     .writeValueAsString(invoice.toMap());
-            System.out.println("####Invoice JSON: " + json);
-            return new Document("JSON", base64(json), sha256(json), invoice.getId());
-        } catch (JsonProcessingException | NoSuchAlgorithmException e) {
+            //System.out.println("####Invoice JSON: " + json);
+            JsonNode jsonNode = mapper.readValue(json, JsonNode.class);
+            String minifiedJson = jsonNode.toString();
+            
+            return new Document("JSON", base64(minifiedJson), sha256(minifiedJson), invoice.getId());
+        } catch (JsonProcessingException | NoSuchAlgorithmException | KeyStoreException | InvalidKeyException | SignatureException | UnrecoverableKeyException e) {
             throw new RuntimeException(e);
         }
     }

@@ -16,24 +16,37 @@
 package com.amaseng.myinvois;
 
 import com.amaseng.myinvois.models.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.PrivateKey;
+import java.security.cert.CertificateFactory;
+
+import java.text.SimpleDateFormat;
+
+
 
 public class TestMain {
 
     public static void main(String[] args) throws IOException {
+        try{
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
+
         
         // Subtract 8 hours
         calendar.add(Calendar.MINUTE, -480);
         Date eightHoursEarlier = calendar.getTime();
+        String dateString = "Fri Jul 12 04:21:46 MYT 2024";
+        String dateString1 = "Fri Jul 08 04:21:46 MYT 2024";
+        String dateString2 = "Fri Jul 20 04:21:46 MYT 2024";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
         System.out.println(eightHoursEarlier);
         String clientID = System.getenv("MYINVOIS_CLIENT_ID");
         if (clientID == null)
@@ -50,13 +63,66 @@ public class TestMain {
         String idValue = System.getenv("MYINVOIS_ID_VALUE");
         if (idValue == null)
             throw new RuntimeException("Environment variable MYINVOIS_ID_VALUE not set.");
+        Optional<String> jksFilePath = Optional.ofNullable(System.getenv("MYINVOIS_JKS_FILE_PATH"));
+        Optional<String> jksStorePassword = Optional.ofNullable(System.getenv("MYINVOIS_JKS_STORE_PASSWORD"));
+        Optional<String> jksAliasName = Optional.ofNullable(System.getenv("MYINVOIS_JKS_ALIAS_NAME"));
+        Optional<String> jksAliasPassword = Optional.ofNullable(System.getenv("MYINVOIS_JKS_ALIAS_PASSWORD"));
+        Optional<String> certificateFilePath = Optional.ofNullable(System.getenv("MYINVOIS_CERT_FILE_PATH"));
+
+        // Load the private key from keystore file if provided.
+        Optional<PrivateKey> privateKey = jksFilePath.map(path -> {
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(path);
+                KeyStore keystore = KeyStore.getInstance("JKS");
+                keystore.load(fis, jksStorePassword.orElseThrow().toCharArray());
+                fis.close();
+
+                return (PrivateKey) keystore.getKey(jksAliasName.orElseThrow(), jksAliasPassword.orElseThrow().toCharArray());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
+        // Load the certificate if provided.
+        Optional<Certificate> certificate =
+                certificateFilePath.map(path -> {
+                    FileInputStream fis = null;
+                    try {
+                        fis = new FileInputStream(path);
+                        CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+                        return certFactory.generateCertificate(fis);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    } finally {
+                        if (fis != null) {
+                            try {
+                                fis.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                });
+
+
         Invoice invoice =
-            new Invoice(       
-                "INV12347",
-                    eightHoursEarlier,
+            new Invoice(
+                privateKey,
+                certificate,
+                "INV7890343390682",
+                dateFormat.parse(dateString),
                 "01",
                 "MYR",
-                new Period(new Date(), new Date(), "Monthly"),
+                new Period(dateFormat.parse(dateString1), dateFormat.parse(dateString2), "Monthly"),
                 new DocumentReference("E12345678912", Optional.empty(), Optional.empty()),
                 new DocumentReference[] {
                     new DocumentReference("E12345678912", Optional.of("CustomsImportForm"), Optional.empty()),
@@ -95,8 +161,8 @@ public class TestMain {
                     new Party(
                         new IndustryClassificationCode[] {}, // TODO: Skip when empty
                         new PartyIdentification[] {
-                                new PartyIdentification("C2584563200", "TIN"),
-                                new PartyIdentification("201901234567", "BRN")
+                                new PartyIdentification(tin, "TIN"),
+                                new PartyIdentification(idValue, "BRN")
                         },
                         new Address(
                                 "Kuala Lumpur",
@@ -118,8 +184,8 @@ public class TestMain {
                     new Party(
                         new IndustryClassificationCode[] {}, // TODO: Skip when empty
                         new PartyIdentification[] {
-                                new PartyIdentification("C2584563200", "TIN"),
-                                new PartyIdentification("201901234567", "BRN")
+                                new PartyIdentification(tin, "TIN"),
+                                new PartyIdentification(idValue, "BRN")
                         },
                         new Address(
                                 "Kuala Lumpur",
@@ -153,7 +219,7 @@ public class TestMain {
                 new Payment(
                     "E12345678912",
                     new MonetaryAmount(new BigDecimal("1.00"), "MYR"),
-                    new Date()
+                    dateFormat.parse(dateString)
                 ),
                 new Charge[] {
                     new Charge(
@@ -248,24 +314,25 @@ public class TestMain {
                     )
                 }
             );
+            
+       
+            // Trying to connect to MyInvois
+            Api api = new Api("https://preprod-api.myinvois.hasil.gov.my", clientID, clientSecret, tin, idType, idValue);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonResult = mapper.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(invoice.toMap());
+            // Login to MyInvois
+            api.init();
 
-        // Trying to connect to MyInvois
-        Api api = new Api("https://preprod-api.myinvois.hasil.gov.my", clientID, clientSecret, tin, idType, idValue);
+            // Validate TIN
+            boolean tinValid = api.validateTin();
+            System.out.println("##############TIN Valid: " + tinValid);
 
-        // Login to MyInvois
-        api.init();
+            // Submit invoice
+            String submissionResponse = api.submitInvoices(new Invoice[] { invoice });
+            System.out.println("##############Submission response: " + submissionResponse);
 
-        // Validate TIN
-        boolean tinValid = api.validateTin();
-        System.out.println("##############TIN Valid: " + tinValid);
-
-        // Submit invoice
-        String submissionResponse = api.submitInvoices(new Invoice[] { invoice });
-        System.out.println("##############Submission response: " + submissionResponse);
+        }catch (Exception e){
+            System.out.println (e.getMessage());
+        }
     }
 
 }
