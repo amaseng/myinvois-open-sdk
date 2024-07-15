@@ -181,12 +181,14 @@ public class Invoice {
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss'Z'");
         ArrayList<Object> invoiceJson = new ArrayList<>();
         try {
+
+            String apiVersion = (privateKey.isPresent() && certificate.isPresent()) ? "1.1" : "1.0";
             
             invoiceJson.add(new LinkedHashMap<Object, Object>() {{
                         put("ID", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", id); }}); }});
                         put("IssueDate", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", dateFormatter.format(issueDateTime)); }}); }});
                         put("IssueTime", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
-                        put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", "1.1"); }}); }});
+                        put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", apiVersion); }}); }});
                         put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
                         put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
                         put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
@@ -206,7 +208,7 @@ public class Invoice {
                 );
             
 
-            if (privateKey.isPresent() && certificate.isPresent()) {
+            if (apiVersion.equals("1.1")) {
 
                 //Step 1 minify invoice, without UBLExtensions
 
