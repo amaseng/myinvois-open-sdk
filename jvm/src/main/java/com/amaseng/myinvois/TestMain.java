@@ -37,17 +37,12 @@ public class TestMain {
     public static void main(String[] args) throws IOException {
         try{
         Calendar calendar = Calendar.getInstance();
-        Date currentDate = calendar.getTime();
-
-        
-        // Subtract 8 hours
+        // Quick and dirty workaround for UTC, subtract 8 hours.
         calendar.add(Calendar.MINUTE, -480);
-        Date eightHoursEarlier = calendar.getTime();
-        String dateString = "Fri Jul 12 04:21:46 MYT 2024";
-        String dateString1 = "Fri Jul 08 04:21:46 MYT 2024";
-        String dateString2 = "Fri Jul 20 04:21:46 MYT 2024";
+        Date eightHoursEarlier = calendar.getTime(); // convert to UTC.
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
         System.out.println(eightHoursEarlier);
+        String dateString = dateFormat.format(eightHoursEarlier);
         String clientID = System.getenv("MYINVOIS_CLIENT_ID");
         if (clientID == null)
             throw new RuntimeException("Environment variable MYINVOIS_CLIENT_ID not set.");
@@ -75,10 +70,13 @@ public class TestMain {
             try {
                 fis = new FileInputStream(path);
                 KeyStore keystore = KeyStore.getInstance("JKS");
-                keystore.load(fis, jksStorePassword.orElseThrow().toCharArray());
+                keystore.load(fis, jksStorePassword.orElse("").toCharArray());
                 fis.close();
 
-                return (PrivateKey) keystore.getKey(jksAliasName.orElseThrow(), jksAliasPassword.orElseThrow().toCharArray());
+                if (!jksAliasName.isPresent())
+                    throw new RuntimeException("MYINVOIS_JKS_ALIAS_NAME not provided.");
+
+                return (PrivateKey) keystore.getKey(jksAliasName.get(), jksAliasPassword.orElse("").toCharArray());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             } finally {
@@ -118,11 +116,11 @@ public class TestMain {
             new Invoice(
                 privateKey,
                 certificate,
-                "INV7890343390682",
-                dateFormat.parse(dateString),
+                "INV7890343390684",
+                eightHoursEarlier,
                 "01",
                 "MYR",
-                new Period(dateFormat.parse(dateString1), dateFormat.parse(dateString2), "Monthly"),
+                new Period(dateFormat.parse(dateString), dateFormat.parse(dateString), "Monthly"),
                 new DocumentReference("E12345678912", Optional.empty(), Optional.empty()),
                 new DocumentReference[] {
                     new DocumentReference("E12345678912", Optional.of("CustomsImportForm"), Optional.empty()),
