@@ -10,4 +10,4 @@ While this software is provided under the terms of the Apache License, Version 2
 
 At the current state support: 
 
-[JVM](jvm/) - Login and validate TIN works, submitted first document to sandbox successfully!.
+[JVM](jvm/) - Completed, login and validate TIN works, submit document to sandbox with and without signature is working.
