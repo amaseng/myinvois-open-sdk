@@ -43,24 +43,24 @@ public class Invoice {
     private Date issueDateTime;
     private String invoiceTypeCode;
     private String documentCurrencyCode;
-    private Period invoicePeriod;
-    private DocumentReference billingReference;
+    private Optional<Period> invoicePeriod;
+    private Optional<DocumentReference> billingReference;
     private DocumentReference[] additionalDocumentReference;
     private AccountingParty accountingSupplierParty;
     private AccountingParty accountingCustomerParty;
-    private Delivery delivery;
-    private PaymentMeans paymentMeans;
-    private PaymentTerms paymentTerms;
-    private Payment prepaidPayment;
+    private Optional<Delivery> delivery;
+    private Optional<PaymentMeans> paymentMeans;
+    private Optional<PaymentTerms> paymentTerms;
+    private Optional<Payment> prepaidPayment;
     private Charge[] allowanceCharge;
     private TaxTotal taxTotal;
     private LegalMonetaryTotal legalMonetaryTotal;
     private InvoiceLine[] invoiceLine;
     
-    public Invoice(Optional<PrivateKey> privateKey, Optional<Certificate> certificate, String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod,
-                   DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty,
-                   AccountingParty accountingCustomerParty, Delivery delivery, PaymentMeans paymentMeans, PaymentTerms paymentTerms,
-                   Payment prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal, LegalMonetaryTotal legalMonetaryTotal, InvoiceLine[] invoiceLine) {
+    public Invoice(Optional<PrivateKey> privateKey, Optional<Certificate> certificate, String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Optional<Period> invoicePeriod,
+                   Optional<DocumentReference> billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty,
+                   AccountingParty accountingCustomerParty, Optional<Delivery> delivery, Optional<PaymentMeans> paymentMeans, Optional<PaymentTerms> paymentTerms,
+                   Optional<Payment> prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal, LegalMonetaryTotal legalMonetaryTotal, InvoiceLine[] invoiceLine) {
         this.privateKey = privateKey;
         this.certificate = certificate;
         this.id = id;
@@ -102,11 +102,11 @@ public class Invoice {
         return documentCurrencyCode;
     }
 
-    public Period getInvoicePeriod() {
+    public Optional<Period> getInvoicePeriod() {
         return invoicePeriod;
     }
 
-    public DocumentReference getBillingReference() {
+    public Optional<DocumentReference> getBillingReference() {
         return billingReference;
     }
 
@@ -122,19 +122,19 @@ public class Invoice {
         return accountingCustomerParty;
     }
 
-    public Delivery getDelivery() {
+    public Optional<Delivery> getDelivery() {
         return delivery;
     }
 
-    public PaymentMeans getPaymentMeans() {
+    public Optional<PaymentMeans> getPaymentMeans() {
         return paymentMeans;
     }
 
-    public PaymentTerms getPaymentTerms() {
+    public Optional<PaymentTerms> getPaymentTerms() {
         return paymentTerms;
     }
 
-    public Payment getPrepaidPayment() {
+    public Optional<Payment> getPrepaidPayment() {
         return prepaidPayment;
     }
 
@@ -190,15 +190,17 @@ public class Invoice {
                         put("IssueTime", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
                         put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", apiVersion); }}); }});
                         put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
-                        put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
-                        put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
-                        put("AdditionalDocumentReference", Arrays.stream(additionalDocumentReference).map(DocumentReference::toMap).toArray());
+                        invoicePeriod.ifPresent(ip -> put("InvoicePeriod", new ArrayList<Object>() {{ add(ip.toMap()); }}));
+                        billingReference.ifPresent(br -> put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(br.toMap()); }}); }}); }}));
+                        if (additionalDocumentReference != null && additionalDocumentReference.length > 0) {
+                            put("AdditionalDocumentReference", Arrays.stream(additionalDocumentReference).map(DocumentReference::toMap).toArray());
+                        }
                         put("AccountingSupplierParty", new ArrayList<Object>() {{ add(accountingSupplierParty.toMap()); }});
                         put("AccountingCustomerParty", new ArrayList<Object>() {{ add(accountingCustomerParty.toMap()); }});
-                        put("Delivery", new ArrayList<Object>() {{ add(delivery.toMap()); }});
-                        put("PaymentMeans", new ArrayList<Object>() {{ add(paymentMeans.toMap()); }});
-                        put("PaymentTerms", new ArrayList<Object>() {{ add(paymentTerms.toMap()); }});
-                        put("PrepaidPayment", new ArrayList<Object>() {{ add(prepaidPayment.toMap()); }});
+                        delivery.ifPresent(d -> put("Delivery", new ArrayList<Object>() {{ add(d.toMap()); }}));
+                        paymentMeans.ifPresent(pm -> put("PaymentMeans", new ArrayList<Object>() {{ add(pm.toMap()); }}));
+                        paymentTerms.ifPresent(pt -> put("PaymentTerms", new ArrayList<Object>() {{ add(pt.toMap()); }}));
+                        prepaidPayment.ifPresent(pp -> put("PrepaidPayment", new ArrayList<Object>() {{ add(pp.toMap()); }}));
                         if (allowanceCharge != null && allowanceCharge.length > 0)
                             put("AllowanceCharge", Arrays.stream(allowanceCharge).map(Charge::toMap).toArray());
                         put("TaxTotal", new ArrayList<Object>() {{ add(taxTotal.toMap()); }});
