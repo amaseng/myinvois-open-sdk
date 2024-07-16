@@ -23,46 +23,46 @@ import java.util.Map;
 import java.util.Optional;
 
 public class Period {
-    private Optional<Date> startDate;
-    private Optional<Date> endDate;
-    private Optional<String> description;
+    private Date startDate;
+    private Date endDate;
+    private String description;
 
-    public Period(Optional<Date> startDate, Optional<Date> endDate, Optional<String> description) {
+    public Period(Date startDate, Date endDate, String description) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
     }
 
-    public Optional<Date> getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public Optional<Date> getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public Optional<String> getDescription() {
+    public String getDescription() {
         return description;
     }
 
     public Map<Object, Object> toMap() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         return new LinkedHashMap<Object, Object>() {{
-            startDate.ifPresent(sd -> put("StartDate", new ArrayList<Object>() {{
+            put("StartDate", new ArrayList<Object>() {{
                 add(new LinkedHashMap<Object, Object>() {{
-                    put("_", dateFormatter.format(sd));
+                    put("_", dateFormatter.format(startDate));
                 }});
-            }}));
-            endDate.ifPresent(ed -> put("EndDate", new ArrayList<Object>() {{
+            }});
+            put("EndDate", new ArrayList<Object>() {{
                 add(new LinkedHashMap<Object, Object>() {{
-                    put("_", dateFormatter.format(ed));
+                    put("_", dateFormatter.format(endDate));
                 }});
-            }}));
-            description.ifPresent(d -> put("Description", new ArrayList<Object>() {{
+            }});
+            put("Description", new ArrayList<Object>() {{
                 add(new LinkedHashMap<Object, Object>() {{
-                    put("_", d);
+                    put("_", description);
                 }});
-            }}));
+            }});
         }};
     }
 }

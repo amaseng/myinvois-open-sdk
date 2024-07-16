@@ -120,7 +120,7 @@ public class TestMain {
                 eightHoursEarlier,
                 "01",
                 "MYR",
-                Optional.of(new Period(Optional.of(dateFormat.parse(dateString)), Optional.of(dateFormat.parse(dateString)), Optional.of("Monthly"))),
+                Optional.of(new Period(dateFormat.parse(dateString), dateFormat.parse(dateString), "Monthly")),
                 Optional.of(new DocumentReference("E12345678912", Optional.empty(), Optional.empty())),
                 new DocumentReference[] {
                     new DocumentReference("E12345678912", Optional.of("CustomsImportForm"), Optional.empty()),
