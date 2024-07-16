@@ -120,8 +120,8 @@ public class TestMain {
                 eightHoursEarlier,
                 "01",
                 "MYR",
-                new Period(dateFormat.parse(dateString), dateFormat.parse(dateString), "Monthly"),
-                new DocumentReference("E12345678912", Optional.empty(), Optional.empty()),
+                Optional.of(new Period(Optional.of(dateFormat.parse(dateString)), Optional.of(dateFormat.parse(dateString)), Optional.of("Monthly"))),
+                Optional.of(new DocumentReference("E12345678912", Optional.empty(), Optional.empty())),
                 new DocumentReference[] {
                     new DocumentReference("E12345678912", Optional.of("CustomsImportForm"), Optional.empty()),
                     new DocumentReference("ASEAN-Australia-New Zealand FTA (AANZFTA)", Optional.of("FreeTradeAgreement"), Optional.of("Sample Description")),
@@ -178,47 +178,47 @@ public class TestMain {
                     ),
                     new AccountID[] {}
                 ),
-                new Delivery(
-                    new Party(
-                        new IndustryClassificationCode[] {}, // TODO: Skip when empty
-                        new PartyIdentification[] {
-                                new PartyIdentification(tin, "TIN"),
-                                new PartyIdentification(idValue, "BRN")
-                        },
-                        new Address(
-                                "Kuala Lumpur",
-                                "50480",
-                                "14",
-                                new String[] {
-                                        "Lot 66",
-                                        "Bangunan Merdeka",
-                                        "Persiaran Jaya"
+                Optional.of(new Delivery(
+                        new Party(
+                                new IndustryClassificationCode[] {}, // TODO: Skip when empty
+                                new PartyIdentification[] {
+                                        new PartyIdentification(tin, "TIN"),
+                                        new PartyIdentification(idValue, "BRN")
                                 },
-                                new Country("MYS", "ISO3166-1", "6")
+                                new Address(
+                                        "Kuala Lumpur",
+                                        "50480",
+                                        "14",
+                                        new String[] {
+                                                "Lot 66",
+                                                "Bangunan Merdeka",
+                                                "Persiaran Jaya"
+                                        },
+                                        new Country("MYS", "ISO3166-1", "6")
+                                ),
+                                new PartyLegalEntity("Greenz Sdn. Bhd."),
+                                new Contact("+60-123456789", "name@buyer.com")
                         ),
-                        new PartyLegalEntity("Greenz Sdn. Bhd."),
-                        new Contact("+60-123456789", "name@buyer.com")
-                    ),
-                    new Shipment(
-                        "1234",
-                        new FreightAllowanceCharge(
-                                true,
-                                "Service charge",
-                                new BigDecimal("100"),
-                                "MYR"
-                            )
-                    )
-                ),
-                new PaymentMeans(
-                    "01",
-                    new FinancialAccount("1234567890123")
-                ),
-                new PaymentTerms("Payment method is cash"),
-                new Payment(
-                    "E12345678912",
-                    new MonetaryAmount(new BigDecimal("1.00"), "MYR"),
-                    dateFormat.parse(dateString)
-                ),
+                        new Shipment(
+                                "1234",
+                                new FreightAllowanceCharge(
+                                        true,
+                                        "Service charge",
+                                        new BigDecimal("100"),
+                                        "MYR"
+                                )
+                        )
+                )),
+                Optional.of(new PaymentMeans(
+                        "01",
+                        new FinancialAccount("1234567890123")
+                )),
+                Optional.of(new PaymentTerms("Payment method is cash")),
+                Optional.of(new Payment(
+                        "E12345678912",
+                        new MonetaryAmount(new BigDecimal("1.00"), "MYR"),
+                        dateFormat.parse(dateString)
+                )),
                 new Charge[] {
                     new Charge(
                         false,
@@ -253,12 +253,12 @@ public class TestMain {
                     }
                 ),
                 new LegalMonetaryTotal(
+                    Optional.of(new MonetaryAmount(new BigDecimal("1436.50"), "MYR")),
                     new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
                     new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
-                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
-                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
-                    new MonetaryAmount(new BigDecimal("1436.50"), "MYR"),
-                    new MonetaryAmount(new BigDecimal("0.30"), "MYR"),
+                    Optional.of(new MonetaryAmount(new BigDecimal("1436.50"), "MYR")),
+                    Optional.of(new MonetaryAmount(new BigDecimal("1436.50"), "MYR")),
+                    Optional.of(new MonetaryAmount(new BigDecimal("0.30"), "MYR")),
                     new MonetaryAmount(new BigDecimal("1436.50"), "MYR")
                 ),
                 new InvoiceLine[] {

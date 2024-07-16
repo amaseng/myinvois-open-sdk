@@ -20,27 +20,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Period {
-    private Date startDate;
-    private Date endDate;
-    private String description;
+    private Optional<Date> startDate;
+    private Optional<Date> endDate;
+    private Optional<String> description;
 
-    public Period(Date startDate, Date endDate, String description) {
+    public Period(Optional<Date> startDate, Optional<Date> endDate, Optional<String> description) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
     }
 
-    public Date getStartDate() {
+    public Optional<Date> getStartDate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    public Optional<Date> getEndDate() {
         return endDate;
     }
 
-    public String getDescription() {
+    public Optional<String> getDescription() {
         return description;
     }
 
@@ -49,21 +50,21 @@ public class Period {
         System.out.println(endDate);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         return new LinkedHashMap<Object, Object>() {{
-            put("StartDate", new ArrayList<Object>() {{
+            startDate.ifPresent(sd -> put("StartDate", new ArrayList<Object>() {{
                 add(new LinkedHashMap<Object, Object>() {{
-                    put("_", dateFormatter.format(startDate));
+                    put("_", dateFormatter.format(sd));
                 }});
-            }});
-            put("EndDate", new ArrayList<Object>() {{
+            }}));
+            endDate.ifPresent(ed -> put("EndDate", new ArrayList<Object>() {{
                 add(new LinkedHashMap<Object, Object>() {{
-                    put("_", dateFormatter.format(endDate));
+                    put("_", dateFormatter.format(ed));
                 }});
-            }});
-            put("Description", new ArrayList<Object>() {{
+            }}));
+            description.ifPresent(d -> put("Description", new ArrayList<Object>() {{
                 add(new LinkedHashMap<Object, Object>() {{
-                    put("_", description);
+                    put("_", d);
                 }});
-            }});
+            }}));
         }};
     }
 }
