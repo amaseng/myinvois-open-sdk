@@ -120,6 +120,7 @@ public class TestMain {
                 eightHoursEarlier,
                 "01",
                 "MYR",
+                new TaxExchangeRate(new BigDecimal("3.0"), "AUD" , "MYR"),
                 new Period(dateFormat.parse(dateString), dateFormat.parse(dateString), "Monthly"),
                 new DocumentReference("E12345678912", Optional.empty(), Optional.empty()),
                 new DocumentReference[] {

@@ -43,6 +43,7 @@ public class Invoice {
     private Date issueDateTime;
     private String invoiceTypeCode;
     private String documentCurrencyCode;
+    private TaxExchangeRate taxExchangeRate;
     private Period invoicePeriod;
     private DocumentReference billingReference;
     private DocumentReference[] additionalDocumentReference;
@@ -57,7 +58,7 @@ public class Invoice {
     private LegalMonetaryTotal legalMonetaryTotal;
     private InvoiceLine[] invoiceLine;
     
-    public Invoice(Optional<PrivateKey> privateKey, Optional<Certificate> certificate, String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, Period invoicePeriod,
+    public Invoice(Optional<PrivateKey> privateKey, Optional<Certificate> certificate, String id, Date issueDateTime, String invoiceTypeCode, String documentCurrencyCode, TaxExchangeRate taxExchangeRate, Period invoicePeriod,
                    DocumentReference billingReference, DocumentReference[] additionalDocumentReference, AccountingParty accountingSupplierParty,
                    AccountingParty accountingCustomerParty, Delivery delivery, PaymentMeans paymentMeans, PaymentTerms paymentTerms,
                    Payment prepaidPayment, Charge[] allowanceCharge, TaxTotal taxTotal, LegalMonetaryTotal legalMonetaryTotal, InvoiceLine[] invoiceLine) {
@@ -67,6 +68,7 @@ public class Invoice {
         this.issueDateTime = issueDateTime;
         this.invoiceTypeCode = invoiceTypeCode;
         this.documentCurrencyCode = documentCurrencyCode;
+        this.taxExchangeRate = taxExchangeRate;
         this.invoicePeriod = invoicePeriod;
         this.billingReference = billingReference;
         this.additionalDocumentReference = additionalDocumentReference;
@@ -100,6 +102,10 @@ public class Invoice {
 
     public String getDocumentCurrencyCode() {
         return documentCurrencyCode;
+    }
+
+    public TaxExchangeRate getTaxExchangeRate() {
+        return taxExchangeRate;
     }
 
     public Period getInvoicePeriod() {
@@ -190,6 +196,7 @@ public class Invoice {
                         put("IssueTime", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", timeFormatter.format(issueDateTime)); }}); }});
                         put("InvoiceTypeCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", invoiceTypeCode); put("listVersionID", apiVersion); }}); }});
                         put("DocumentCurrencyCode", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("_", documentCurrencyCode); }}); }});
+                        put("TaxExchangeRate", new ArrayList<Object>() {{ add(taxExchangeRate.toMap()); }});
                         put("InvoicePeriod", new ArrayList<Object>() {{ add(invoicePeriod.toMap()); }});
                         put("BillingReference", new ArrayList<Object>() {{ add(new LinkedHashMap<Object, Object>() {{ put("AdditionalDocumentReference", new ArrayList<Object>() {{ add(billingReference.toMap()); }}); }}); }});
                         put("AdditionalDocumentReference", Arrays.stream(additionalDocumentReference).map(DocumentReference::toMap).toArray());
