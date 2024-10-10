@@ -18,17 +18,18 @@ package com.amaseng.myinvois.models;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class LegalMonetaryTotal {
-    private MonetaryAmount lineExtensionAmount;
+    private Optional<MonetaryAmount> lineExtensionAmount;
     private MonetaryAmount taxExclusiveAmount;
     private MonetaryAmount taxInclusiveAmount;
-    private MonetaryAmount allowanceTotalAmount;
-    private MonetaryAmount chargeTotalAmount;
-    private MonetaryAmount payableRoundingAmount;
+    private Optional<MonetaryAmount> allowanceTotalAmount;
+    private Optional<MonetaryAmount> chargeTotalAmount;
+    private Optional<MonetaryAmount> payableRoundingAmount;
     private MonetaryAmount payableAmount;
 
-    public LegalMonetaryTotal(MonetaryAmount lineExtensionAmount, MonetaryAmount taxExclusiveAmount, MonetaryAmount taxInclusiveAmount, MonetaryAmount allowanceTotalAmount, MonetaryAmount chargeTotalAmount, MonetaryAmount payableRoundingAmount, MonetaryAmount payableAmount) {
+    public LegalMonetaryTotal(Optional<MonetaryAmount> lineExtensionAmount, MonetaryAmount taxExclusiveAmount, MonetaryAmount taxInclusiveAmount, Optional<MonetaryAmount> allowanceTotalAmount, Optional<MonetaryAmount> chargeTotalAmount, Optional<MonetaryAmount> payableRoundingAmount, MonetaryAmount payableAmount) {
         this.lineExtensionAmount = lineExtensionAmount;
         this.taxExclusiveAmount = taxExclusiveAmount;
         this.taxInclusiveAmount = taxInclusiveAmount;
@@ -38,7 +39,7 @@ public class LegalMonetaryTotal {
         this.payableAmount = payableAmount;
     }
 
-    public MonetaryAmount getLineExtensionAmount() {
+    public Optional<MonetaryAmount> getLineExtensionAmount() {
         return lineExtensionAmount;
     }
 
@@ -50,15 +51,15 @@ public class LegalMonetaryTotal {
         return taxInclusiveAmount;
     }
 
-    public MonetaryAmount getAllowanceTotalAmount() {
+    public Optional<MonetaryAmount> getAllowanceTotalAmount() {
         return allowanceTotalAmount;
     }
 
-    public MonetaryAmount getChargeTotalAmount() {
+    public Optional<MonetaryAmount> getChargeTotalAmount() {
         return chargeTotalAmount;
     }
 
-    public MonetaryAmount getPayableRoundingAmount() {
+    public Optional<MonetaryAmount> getPayableRoundingAmount() {
         return payableRoundingAmount;
     }
 
@@ -68,12 +69,12 @@ public class LegalMonetaryTotal {
 
     public Map<Object, Object> toMap() {
         Map<Object, Object> map = new LinkedHashMap<>();
-        map.put("LineExtensionAmount", new ArrayList<Object>() {{ add(lineExtensionAmount.toMap()); }});
+        lineExtensionAmount.ifPresent(lea -> map.put("LineExtensionAmount", new ArrayList<Object>() {{ add(lea.toMap()); }}));
         map.put("TaxExclusiveAmount", new ArrayList<Object>() {{ add(taxExclusiveAmount.toMap()); }});
         map.put("TaxInclusiveAmount", new ArrayList<Object>() {{ add(taxInclusiveAmount.toMap()); }});
-        map.put("AllowanceTotalAmount", new ArrayList<Object>() {{ add(allowanceTotalAmount.toMap()); }});
-        map.put("ChargeTotalAmount", new ArrayList<Object>() {{ add(chargeTotalAmount.toMap()); }});
-        map.put("PayableRoundingAmount", new ArrayList<Object>() {{ add(payableRoundingAmount.toMap()); }});
+        allowanceTotalAmount.ifPresent(ata -> map.put("AllowanceTotalAmount", new ArrayList<Object>() {{ add(ata.toMap()); }}));
+        chargeTotalAmount.ifPresent(cta -> map.put("ChargeTotalAmount", new ArrayList<Object>() {{ add(cta.toMap()); }}));
+        payableRoundingAmount.ifPresent(pra -> map.put("PayableRoundingAmount", new ArrayList<Object>() {{ add(pra.toMap()); }}));
         map.put("PayableAmount", new ArrayList<Object>() {{ add(payableAmount.toMap()); }});
         return map;
     }
